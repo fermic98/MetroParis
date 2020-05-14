@@ -67,6 +67,62 @@ public class MetroDAO {
 
 		return linee;
 	}
+    
+	
+	public boolean getConnessioniTraFermate(Fermata f1, Fermata f2) {
+		
+		final String sql="SELECT COUNT(*) AS C FROM connessione WHERE id_stazP=? AND id_stazA=?";
+		
+		try {
+			Connection conn = DBConnect.getConnection();
+			PreparedStatement ps = conn.prepareStatement(sql);
+			
+			ps.setInt(1, f1.getIdFermata());
+			ps.setInt(2, f2.getIdFermata());
 
+			ResultSet rs = ps.executeQuery();
+			
+			rs.next() ;
+				if(rs.getInt("C")>=1) {
+					return true;
+				}
+			
+			ps.close();
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		    throw new RuntimeException();
+		}
+		
+		return false;
+		
+		
+	}
 
+	
+	public List<Integer> getAllAdiacenti(Fermata fermata){
+		List<Integer> adiacenti= new ArrayList<>();
+		final String sql = "SELECT DISTINCT id_stazA FROM connessione " + 
+				"WHERE id_stazP=?";
+		
+		try {
+			Connection conn = DBConnect.getConnection();
+			PreparedStatement ps = conn.prepareStatement(sql);
+			
+			ps.setInt(1, fermata.getIdFermata());
+			
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				adiacenti.add(rs.getInt("id_stazA"));
+			}
+			
+		} catch (SQLException e) {
+			 e.printStackTrace();
+		}
+		
+		
+		
+		return adiacenti;
+	}
 }

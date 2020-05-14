@@ -1,5 +1,7 @@
 package it.polito.tdp.metroparis.model;
 
+import java.util.List;
+
 import com.javadocmd.simplelatlng.LatLng;
 
 public class Fermata {
@@ -41,6 +43,17 @@ public class Fermata {
 
 	public void setCoords(LatLng coords) {
 		this.coords = coords;
+	}
+	
+	public static Fermata getFermata(Integer i, List<Fermata> fermate) {
+		Fermata trovata = null;
+		for(Fermata f : fermate) {
+			if(f.getIdFermata()==i) {
+				trovata=f;
+				break;
+			}
+		}
+		return trovata;
 	}
 
 	@Override
